@@ -1,0 +1,10 @@
+### Starting build.
+# Target: e5.ml.depends, tags: { package(qcheck), extension:ml, file:e5.ml, ocaml, ocamldep, quiet }
+ocamlfind ocamldep -package qcheck -modules e5.ml > e5.ml.depends
+# Target: e5.cmo, tags: { package(qcheck), byte, compile, extension:cmo, extension:ml, file:e5.cmo, file:e5.ml, implem, ocaml, quiet }
+ocamlfind ocamlc -c -package qcheck -o e5.cmo e5.ml
+# Target: e5.cmx, tags: { package(qcheck), compile, extension:cmx, extension:ml, file:e5.cmx, file:e5.ml, implem, native, ocaml, quiet }
+ocamlfind ocamlopt -c -package qcheck -o e5.cmx e5.ml
+# Target: e5.native, tags: { package(qcheck), dont_link_with, extension:native, file:e5.native, link, native, ocaml, program, quiet }
+ocamlfind ocamlopt -linkpkg -package qcheck e5.cmx -o e5.native
+# Compilation successful.

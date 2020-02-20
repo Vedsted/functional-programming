@@ -1,0 +1,10 @@
+### Starting build.
+# Target: e7.ml.depends, tags: { package(qcheck), extension:ml, file:e7.ml, ocaml, ocamldep, quiet }
+ocamlfind ocamldep -package qcheck -modules e7.ml > e7.ml.depends
+# Target: e7.cmo, tags: { package(qcheck), byte, compile, extension:cmo, extension:ml, file:e7.cmo, file:e7.ml, implem, ocaml, quiet }
+ocamlfind ocamlc -c -package qcheck -o e7.cmo e7.ml
+# Target: e7.cmx, tags: { package(qcheck), compile, extension:cmx, extension:ml, file:e7.cmx, file:e7.ml, implem, native, ocaml, quiet }
+ocamlfind ocamlopt -c -package qcheck -o e7.cmx e7.ml
+# Target: e7.native, tags: { package(qcheck), dont_link_with, extension:native, file:e7.native, link, native, ocaml, program, quiet }
+ocamlfind ocamlopt -linkpkg -package qcheck e7.cmx -o e7.native
+# Compilation successful.
