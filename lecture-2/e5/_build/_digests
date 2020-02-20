@@ -1,5 +1,0 @@
-"Rule: ocaml: ml -> cmo & cmi (%=e5 )": "\220\160\011\215V\246\210\155n\168|\154q\028l\022"
-"Rule: ocaml: ml & cmi -> cmx & o (%=e5 )": "b_Y\190He\020BV&\169\135\002\194\134X"
-"Rule: ocaml: cmx* & o* -> native (%=e5 )": "Q\233Dd@\020\"\255D>\162\160VbT\220"
-"Resource: /home/jvs/git/functional-programming/lecture-2/e5/e5.ml": "5'\242\020r\166\243^]\137\223\200\178x'\242"
-"Rule: ocaml dependencies ml (%=e5 )": "\006\218\145J\1825;\195\197\213 \149\02733\139"

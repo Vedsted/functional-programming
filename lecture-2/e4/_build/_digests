@@ -1,5 +1,0 @@
-"Rule: ocaml: ml -> cmo & cmi (%=e4 )": "1\\\167\190s\228\127;\236\176\188\192\1676\134\165"
-"Rule: ocaml dependencies ml (%=e4 )": "\187n3\254}\206\204\006JW\163\138\244FU\159"
-"Rule: ocaml: ml & cmi -> cmx & o (%=e4 )": "\003\187\031l+\023\1885\005\219\193\163\187\237%\238"
-"Rule: ocaml: cmx* & o* -> native (%=e4 )": "\198\182?\181\r6\159\148x)\237\172i\194|4"
-"Resource: /home/jvs/git/functional-programming/lecture-2/e4/e4.ml": "\1963\254'\181S\156\197\179\202\248H\183O}\240"

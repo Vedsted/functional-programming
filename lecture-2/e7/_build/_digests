@@ -1,5 +1,0 @@
-"Resource: /home/jvs/git/functional-programming/lecture-2/e7/e7.ml": "\141\152\189:m\221\208N\242F\142\226\028O\192\129"
-"Rule: ocaml dependencies ml (%=e7 )": "\146\179\162#/\028\232\139\218\004\240D\184\243\195X"
-"Rule: ocaml: cmx* & o* -> native (%=e7 )": "\180Q\2056\248^\016U\181\184\182\003\237r[\159"
-"Rule: ocaml: ml & cmi -> cmx & o (%=e7 )": "/\205\179\155v\187\171\0237cR\167\2142\161b"
-"Rule: ocaml: ml -> cmo & cmi (%=e7 )": "2s\223\255\214\212S\183q\217\002C\r>q\020"
