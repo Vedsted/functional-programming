@@ -16,7 +16,6 @@ let mytree = Plus (Lit 1, Times (X, Lit 3));;
 
 
 
-
 (***************
 
     Exercise 1 
@@ -106,6 +105,33 @@ let rec run reg instList stack =
                                                     | e2::l2 -> run reg remainingInstructions ((e1*e2)::l2))
 ;;
 
+exception Stack_missing_ints;;
+
+let rec run2 reg instList stack = 
+    match instList with
+    | [] -> stack
+    | (inst::remainingInstructions) -> match inst with
+                                    | Load -> reg::stack
+                                    | Push i -> i::stack
+                                    | Add -> (match stack with
+                                            | e1::e2::l -> run reg remainingInstructions ((e1+e2)::l)
+                                            | _ -> raise Stack_missing_ints)
+                                    | Mult -> (match stack with
+                                            | e1::e2::l -> run reg remainingInstructions ((e1*e2)::l)
+                                            | _ -> raise Stack_missing_ints)
+;;
+
+let rec run3 reg instList stack = 
+    match instList, stack with
+    | [], _ -> stack
+    | Load::instLeft, _ -> reg::stack
+    | Push i::instLeft, _ -> i::stack
+    | Add::instLeft, e1::e2::l -> run reg instLeft ((e1+e2)::l)
+    | Mult::instLeft, e1::e2::l -> run reg instLeft ((e1*e2)::l)
+    | _, _ -> raise Stack_missing_ints 
+;;
+
+
 
 (*
     Part B:
@@ -142,16 +168,26 @@ let rec run reg instList stack =
     as well as corner cases such as -1, 0, 1, min_int, and max_int.
 *)
 
-let myIntGen = Gen.oneofl (
-    [1;0;-1;max_int;min_int]@
-    Gen.generate ~n:10 Gen.small_signed_int@
-    Gen.generate ~n:10 Gen.int
-);;
+let myIntGen = 
+    let edgeCases = Gen.oneofl [1;0;-1;max_int;min_int] in
+    Gen.frequency [
+        (1, edgeCases);
+        (3, small_signed_int.gen);
+        (5, int.gen);
+    ]
+;;
+
 
 (*
     Part B:
     Compute statistics for your generator's distribution and compare them
 *)
+
+let int_dist =
+    let int_gen = set_stats [("myIntGen", (fun i -> i))] (make myIntGen) in
+    Test.make ~count:10000 ~name:"true" int_gen (fun _ -> true)
+
+let _ = QCheck_runner.run_tests ~verbose:true [int_dist];;
 
 
 
@@ -164,21 +200,21 @@ let myIntGen = Gen.oneofl (
 
 ****************)
 
-let die_gen = Gen.map (fun i -> i+1) (Gen.int_bound 5)
+let dice_gen= 
+    let g = Gen.map (fun i -> i+1) (Gen.int_bound 5) in 
+    Gen.map2 (fun a b -> (a, b)) g g
+;;
 
-let pair_of_die_gen =  pair die_gen die_gen;;
-
-let die_gen = set_stats [("Dice", pair_of_dice_gen)] int in Test.make ~count:10000 ~name:"true" die_gen (fun _ -> true);;
+let dice_gen2 = Gen.map2 (fun a b -> (a+1, b+1)) (int_bound(5)).gen (int_bound(5)).gen;;
 
 
+let die_roll_dist =
+    let g = set_stats [("Dice Gen", (fun (a,b) -> a+b))] (make dice_gen) in
+    Test.make ~count:10000 ~name:"true" g (fun _ -> true)
+;;
 
-let int_gen =
-    set_stats [("msb",fun i -> msb i)] int in
-    Test.make ~count:10000 ~name:"true" int_gen (fun _ -> true);;
+let _ = QCheck_runner.run_tests ~verbose:true [die_roll_dist];;
 
-let list_gen =
-    set_stats [("list length",List.length)] (list int) in
-    Test.make ~count:1000 list_gen (fun _ -> true);;
 
 (***************
 
@@ -212,15 +248,18 @@ let my_int_of_string s =
 
 (***************
 
-    Exercise 5:
+    Exercise 6:
 
-    List.find_opt : ('a -> bool) -> 'a list -> 'a option returns an option type representing whether a list contains an element satisfying a given property:
+    List.find_opt : ('a -> bool) -> 'a list -> 'a option returns an option type 
+    representing whether a list contains an element satisfying a given property:
     
     # List.find_opt (fun e -> e>4) [2;3;5;0];;
     - : int option = Some 5
     # List.find_opt (fun e -> e>4) [2;3;0];;
     - : int option = None
-    Write a wrapper my_list_find : ('a -> bool) -> 'a list -> 'a that calls List.find_opt and instead returns the found element or throws exception Not_found.
+    
+    Write a wrapper my_list_find : ('a -> bool) -> 'a list -> 'a that calls 
+    List.find_opt and instead returns the found element or throws exception Not_found.
 
 ****************)
 
@@ -233,7 +272,7 @@ let my_list_find exp list = match (List.find_opt exp list) with
 
 (***************
 
-    Exercise 6:
+    Exercise 7:
 
     Red-Black Trees
 
