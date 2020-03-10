@@ -54,12 +54,13 @@ let _ = member myList 5000;; (* -> false *)
 let fac n = 
     let rec f n acc = match n with
       | 0 -> acc
-      | _ -> f (n-1) (n*acc)
+      | _ when (n > 0) -> f (n-1) (n*acc)
+      | _ -> f (n+1) (n*acc)
     in f n 1
 ;;
-let t_fac = Test.make ~count:500 ~name:"Factorial test" small_signed_int (fun i -> let _ = fac i in true);;
+(* +/- 15 is max without int overflow *)
+let t_fac = Test.make ~count:100 ~name:"Factorial test" (int_range (-15) 15) (fun i -> let _ = fac i in true);;
 let _ = QCheck_runner.run_tests ~verbose:true [t_fac];;
-
 
 let reverse xs = 
     let rec r xs acc= match xs with
@@ -67,7 +68,7 @@ let reverse xs =
       | x::xs -> r xs (x::acc)
     in r xs []
 ;;
-let t_rev = Test.make ~count:500 ~name:"Reverse test" (list small_signed_int) (fun i -> reverse i = List.rev i);;
-let t_rev2 = Test.make ~count:500 ~name:"Reverse test2" (list small_signed_int) (fun i -> i = reverse (reverse i));;
-let t_rev3 = Test.make ~count:500 ~name:"Reverse test2" (pair (list small_signed_int) int) (fun (l, i) -> reverse (i::l) = (reverse l)@[i]);;
+let t_rev = Test.make ~count:500 ~name:"Reverse test" (list int) (fun i -> reverse i = List.rev i);;
+let t_rev2 = Test.make ~count:500 ~name:"Reverse test2" (list int) (fun i -> i = reverse (reverse i));;
+let t_rev3 = Test.make ~count:500 ~name:"Reverse test2" (pair (list int) int) (fun (l, i) -> reverse (i::l) = (reverse l)@[i]);;
 let _ = QCheck_runner.run_tests ~verbose:true [t_rev; t_rev2; t_rev3];;
