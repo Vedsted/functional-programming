@@ -15,13 +15,7 @@ const reverseInternal = <T>(l: T[], acc: T[]): T[] => {
 
 const reverseInternal2 = <T>(l: T[]):T[] => {
     let ret = []
-    
-    //for (let i = l.length-1; i >= 0; i--) {
-    //    ret.push(l[i]);
-    //}
-
     l.forEach(e => ret.unshift(e))
-
     return ret;
 }
 
